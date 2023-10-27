@@ -6,20 +6,17 @@ import 'package:hivegenapp/service/user_service.dart';
 import 'package:path_provider/path_provider.dart';
 
 class UserDbService {
-  Box<List<UserModel>>? box;
+  Box<UserModel>? box;
   final UserService _service = UserService();
   Future<void> openBox() async {
     Directory appDocDir = await getApplicationDocumentsDirectory();
     Hive.init(appDocDir.path);
-    box = await Hive.openBox<List<UserModel>>("db");
+    box = await Hive.openBox<UserModel>("db");
     print("Box opened");
   }
 
-  Future<void> writeToDb(List<UserModel> userModel) async {
-    await openBox();
-    await box!.add(userModel);
-    print("Box write data");
-    print(box!.values.toList());
+  Future<void> writeToDb(List<UserModel> model) async {
+    await box!.addAll(model);
   }
 
   Future<dynamic> getUserData() async {
